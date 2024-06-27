@@ -20,3 +20,8 @@ I completed my project in iteratively more complex modules. These modules were a
 4. Create a package in my container that allows me to move a point around in RVIZ based on keyboard input
 5. ???
 6. Replace my pytorch model with a homemade tensorflow lite model
+
+
+Kalman filter 
+height estimate
+visio nbased localization of each camera
