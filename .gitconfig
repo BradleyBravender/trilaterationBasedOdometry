@@ -1,5 +1,0 @@
-[user]
-	email = bsbraven@ualberta.ca
-	name = Bradley Bravender
-[credential]
-	helper = "!f() { /root/.vscode-server/bin/5437499feb04f7a586f677b155b039bc2b3669eb-legacy/node /tmp/vscode-remote-containers-12e2415d-9d53-4b09-b20a-5fc192d94464.js git-credential-helper $*; }; f"
