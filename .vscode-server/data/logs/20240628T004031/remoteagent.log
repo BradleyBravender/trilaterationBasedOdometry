@@ -1,0 +1,49 @@
+2024-06-28 00:40:31.536 [info] 
+
+
+
+
+2024-06-28 00:40:31.544 [info] Extension host agent started.
+2024-06-28 00:40:31.596 [debug] No uninstalled extensions found.
+2024-06-28 00:40:31.597 [info] Started initializing default profile extensions in extensions installation folder. file:///root/.vscode-server/extensions
+2024-06-28 00:40:31.600 [info] [127.0.0.1][454be247][ManagementConnection] New connection established.
+2024-06-28 00:40:31.606 [debug] ComputeTargetPlatform: linux-x64
+2024-06-28 00:40:31.611 [info] Completed initializing default profile extensions in extensions installation folder. file:///root/.vscode-server/extensions
+2024-06-28 00:40:31.620 [info] Log level changed to info
+2024-06-28 00:40:31.939 [info] [127.0.0.1][87aa82f7][ExtensionHostConnection] New connection established.
+2024-06-28 00:40:31.962 [info] [127.0.0.1][87aa82f7][ExtensionHostConnection] <321> Launched Extension Host Process.
+2024-06-28 00:41:31.457 [info] [127.0.0.1][454be247][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+2024-06-28 00:41:34.302 [info] [127.0.0.1][640ebc47][ManagementConnection] New connection established.
+2024-06-28 00:41:35.986 [info] [127.0.0.1][f4905217][ExtensionHostConnection] New connection established.
+2024-06-28 00:41:35.988 [info] [127.0.0.1][f4905217][ExtensionHostConnection] <1003> Launched Extension Host Process.
+2024-06-28 00:41:45.941 [info] [127.0.0.1][640ebc47][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+2024-06-28 00:41:48.236 [info] [127.0.0.1][e918c3ed][ManagementConnection] New connection established.
+2024-06-28 00:41:49.001 [info] [127.0.0.1][15dce783][ExtensionHostConnection] New connection established.
+2024-06-28 00:41:49.003 [info] [127.0.0.1][15dce783][ExtensionHostConnection] <1541> Launched Extension Host Process.
+2024-06-28 00:41:51.554 [info] [127.0.0.1][87aa82f7][ExtensionHostConnection] <321> Extension Host Process exited with code: 0, signal: null.
+2024-06-28 00:41:59.215 [info] [127.0.0.1][f4905217][ExtensionHostConnection] <1003> Extension Host Process exited with code: 0, signal: null.
+2024-06-28 00:42:29.250 [info] [127.0.0.1][e918c3ed][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+2024-06-28 00:42:32.415 [info] [127.0.0.1][1d1ae8a7][ManagementConnection] New connection established.
+2024-06-28 00:42:33.099 [info] [127.0.0.1][9f3d4d76][ExtensionHostConnection] New connection established.
+2024-06-28 00:42:33.102 [info] [127.0.0.1][9f3d4d76][ExtensionHostConnection] <2777> Launched Extension Host Process.
+2024-06-28 00:42:35.156 [info] [127.0.0.1][15dce783][ExtensionHostConnection] <1541> Extension Host Process exited with code: 0, signal: null.
+2024-06-28 00:42:47.944 [info] Getting Manifest... ms-python.python
+2024-06-28 00:42:56.982 [info] Getting Manifest... ms-python.python
+2024-06-28 00:43:53.111 [info] Downloaded extension to file:///root/.vscode-server/extensionsCache/24a7a91a-1557-47d3-ac5c-858b49761ebd
+2024-06-28 00:43:53.535 [info] Installing extension: ms-python.vscode-pylance file:///root/.vscode-server/extensions/extensions.json
+2024-06-28 00:43:53.536 [info] Installing the extension without checking dependencies and pack ms-python.vscode-pylance
+2024-06-28 00:43:58.838 [info] Extracted extension to file:///root/.vscode-server/extensions/ms-python.vscode-pylance-2024.6.1: ms-python.vscode-pylance
+2024-06-28 00:43:58.845 [info] Renamed to /root/.vscode-server/extensions/ms-python.vscode-pylance-2024.6.1
+2024-06-28 00:43:58.889 [info] Extension installed successfully: ms-python.vscode-pylance file:///root/.vscode-server/extensions/extensions.json
+2024-06-28 00:44:00.692 [info] Downloaded extension to file:///root/.vscode-server/extensionsCache/f702acc5-5b7a-47f3-8f62-2b89fd7ade84
+2024-06-28 00:44:00.741 [info] Installing extension: ms-python.debugpy file:///root/.vscode-server/extensions/extensions.json
+2024-06-28 00:44:00.742 [info] Installing the extension without checking dependencies and pack ms-python.debugpy
+2024-06-28 00:44:01.245 [info] Extracted extension to file:///root/.vscode-server/extensions/ms-python.debugpy-2024.6.0: ms-python.debugpy
+2024-06-28 00:44:01.248 [info] Renamed to /root/.vscode-server/extensions/ms-python.debugpy-2024.6.0
+2024-06-28 00:44:01.300 [info] Extension installed successfully: ms-python.debugpy file:///root/.vscode-server/extensions/extensions.json
+2024-06-28 00:44:04.106 [info] Downloaded extension to file:///root/.vscode-server/extensionsCache/09124634-feb1-4184-8418-ca800729d048
+2024-06-28 00:44:04.113 [info] Installing extension: ms-python.python file:///root/.vscode-server/extensions/extensions.json
+2024-06-28 00:44:04.113 [info] Installing the extension without checking dependencies and pack ms-python.python
+2024-06-28 00:44:05.889 [info] Extracted extension to file:///root/.vscode-server/extensions/ms-python.python-2024.8.1: ms-python.python
+2024-06-28 00:44:05.896 [info] Renamed to /root/.vscode-server/extensions/ms-python.python-2024.8.1
+2024-06-28 00:44:05.951 [info] Extension installed successfully: ms-python.python file:///root/.vscode-server/extensions/extensions.json
