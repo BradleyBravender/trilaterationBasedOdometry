@@ -8,10 +8,11 @@ import time
 class DistanceNode():
     MIN_RADIUS = 5
     MAX_RADIUS = 1000 # was 20
-    SENSITIVITY = 5  # The smaller, the more circles may get detected
+    SENSITIVITY = 20  # The smaller, the more circles may get detected
     
     def __init__(self):
         cameraNumber = 0
+        self.distanceBuffer = []
         self.cap = cv2.VideoCapture(cameraNumber)
         if not self.cap.isOpened():
             print("Error: Could not open webcam.")
@@ -49,7 +50,7 @@ class DistanceNode():
         filteredFrame = cv2.medianBlur(filteredFrame, 5)
         filteredFrame = cv2.cvtColor(filteredFrame, cv2.COLOR_BGR2GRAY)
 
-        # Idea: calculate the ceontroid of filteredFrame to help the transform
+        # Idea: calculate the centroid of filteredFrame to help the transform
         # select the closest circle 
         black_pixels = np.where(filteredFrame == 0)
 
@@ -78,32 +79,49 @@ class DistanceNode():
             # cv2.circle(image, (x, y), 1, (0, 255, 0), 1)
 
             x, y, r = circles[0]
+
+            self.get_distance(2 * r)
             
-            topLeft = (x - r, y - r)
-            topRight = (x + r, y - r)
-            bottomLeft = (x - r, y + r)
-            bottomRight = (x + r, y + r)
-                
-            cv2.circle(image, topLeft, 3, (0, 255, 0), 1)
-            cv2.circle(image, topRight, 3, (0, 255, 0), 1)
-            cv2.circle(image, bottomLeft, 3, (0, 255, 0), 1)
-            cv2.circle(image, bottomRight, 3, (0, 255, 0), 1)
-            cv2.circle(image, (x,y), 3, (0, 255, 0), 1)
-            
+            # For visualization:
+
+            visual = False
+            if visual:
+                topLeft = (x - r, y - r)
+                topRight = (x + r, y - r)
+                bottomLeft = (x - r, y + r)
+                bottomRight = (x + r, y + r)
+                    
+                cv2.circle(filteredFrame, topLeft, 3, (0, 255, 0), 1)
+                cv2.circle(filteredFrame, topRight, 3, (0, 255, 0), 1)
+                cv2.circle(filteredFrame, bottomLeft, 3, (0, 255, 0), 1)
+                cv2.circle(filteredFrame, bottomRight, 3, (0, 255, 0), 1)
+                cv2.circle(filteredFrame, (x,y), 3, (0, 255, 0), 1)            
         
-        # Display the original and filtered frames
-        cv2.imshow('Original Webcam Feed', image)
-        cv2.imshow('Filtered Webcam Feed', filteredFrame)  # For Debugging
+                # Display the original and filtered frames
+                # cv2.imshow('Original Webcam Feed', image)
+                cv2.imshow('Filtered Webcam Feed', filteredFrame)  # For Debugging
 
-        # Break the loop when 'q' key is pressed
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            self.shutdown()
+                # Break the loop when 'q' key is pressed
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    self.shutdown()
 
 
-    # def get_distance(self, x, y, w, h):
+    def get_distance(self, pixelHeight):
+        actualHeight = 0.111  # meters
+        focalLength = 1845       # TODO: calculate a more accurate focal length  
+        distance = (focalLength * actualHeight) / pixelHeight
+        # distance = int(input("distance in cm: "))/100
+        # focalLength = (pixelHeight * distance) / actualHeight
         
-    #     pass
-
+        if len(self.distanceBuffer) > 2:
+            self.distanceBuffer.pop(0)
+        
+        self.distanceBuffer.append(distance)
+        
+        # Take the average distance
+        finalDistance = sum(self.distanceBuffer) / len(self.distanceBuffer)
+        print(f"Distance from camera: {(finalDistance):.2f} meters.")
+        
 
     def shutdown(self):
         self.cap.release()
