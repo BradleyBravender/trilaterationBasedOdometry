@@ -1,14 +1,24 @@
-# #FROM osrf/ros:foxy-desktop
-# FROM python:3
+# Use an official ROS distribution as a parent image
+FROM ros:noetic
 
-# Use the official YOLOv5 image as a base
-FROM ultralytics/yolov5:latest
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Set the working directory
-WORKDIR /usr/src/app
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 
-# Install necessary packages for accessing the webcam
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y curl
+
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+
+RUN /bin/bash -c "echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc"
+
+# Install packages to get everything running
+RUN apt update && apt upgrade -y && apt-get install -y \ 
+    python3-rosdep \
+    python3-rosinstall-generator \
+    python3-wstool \
+    build-essential \
+    python3-pip \
     libgl1-mesa-glx \
     libglib2.0-0 \
     libx11-dev \
@@ -17,20 +27,19 @@ RUN apt-get update && apt-get install -y \
     libsm-dev \
     libxkbcommon-x11-0 \
     qt5-default \
-    build-essential \
-    libopencv-dev
+    libopencv-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip
+# Install packages to get auxiliary packages running
+RUN pip3 install --upgrade pip && \
+    pip3 install opencv-python-headless \
+    ultralytics    
 
-# Clone the YOLOv5 repository
-RUN git clone https://github.com/ultralytics/yolov5.git
+# Update rosdep, numpy, and the system as a whole
+RUN rosdep update && \
+    pip3 install --upgrade numpy && \
+    apt-get update
 
-# Set the working directory to the YOLOv5 folder
-WORKDIR /usr/src/app/yolov5
+WORKDIR /root
 
-# Ensure all dependencies are installed
-RUN pip install -r requirements.txt
-
-# Default command
-# CMD ["python3", "detect.py", "--source", "0", "--weights", "yolov5s.pt", "--conf", "0.25"]
 CMD [ "/bin/bash" ]
