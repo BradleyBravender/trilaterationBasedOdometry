@@ -1,16 +1,32 @@
-# The idea in this node to is calculate the distance between the 
+###############################################################################
+# *Author*:     Bradley Bravender
+# *Purpose*:    This node calculates the distance between the given camera and 
+#               the object.   
+# *To Do*       Integrate ROS in order to have this node publish the distance
+#               between the object and the camera.
+###############################################################################
 
+import argparse
 import cv2
 import sys
 import numpy as np
 import time
 
-class DistanceNode():
-    MIN_RADIUS = 5
-    MAX_RADIUS = 1000 # was 20
-    SENSITIVITY = 20  # The smaller, the more circles may get detected
-    
-    def __init__(self):
+class DistanceNode():   
+    def __init__(self, args):
+        """
+        Initializes the distance class, which estimates the distance between
+        the object and the camera.
+
+        Parameters
+        ----------
+        args : argparse.ArgumentParser
+            Used to pass parameters to the Hough transform
+        """
+        self.minRadius = args.minRadius
+        self.maxRadius = args.maxRadius
+        # The smaller the sensitivity, the more circles may get detected.
+        self.sensitivity = args.sensitivity
         cameraNumber = 0
         self.distanceBuffer = []
         self.cap = cv2.VideoCapture(cameraNumber)
@@ -18,15 +34,17 @@ class DistanceNode():
             print("Error: Could not open webcam.")
             exit()
             
-      
-    # def tune_color(self):
-
 
     def get_bounding_box(self):
+        """
+        Uses color filtering and a hough transform to draw a bounding box around
+        the object.
+        """
         success, image = self.cap.read()
 
         while not success:  
-            print(f"Port {cameraNumber} is not connected to a camera. Try a different camera port")
+            print(f"Port {cameraNumber} is not connected to a camera.")
+            print("Try a different camera port")
             cameraNumber = int(input("Try a different camera number: "))
             cap = cv2.VideoCapture(cameraNumber)
             success, image = self.cap.read()
@@ -46,7 +64,11 @@ class DistanceNode():
         # Create an all-white image
         whiteBackground = np.ones_like(image) * 255
         # Apply the inverted mask to the white background
-        filteredFrame = cv2.bitwise_and(whiteBackground, whiteBackground, mask=invertedMask)
+        filteredFrame = cv2.bitwise_and(
+            whiteBackground, 
+            whiteBackground, 
+            mask=invertedMask
+        )
         filteredFrame = cv2.medianBlur(filteredFrame, 5)
         filteredFrame = cv2.cvtColor(filteredFrame, cv2.COLOR_BGR2GRAY)
 
@@ -59,16 +81,25 @@ class DistanceNode():
             centroid_y = np.mean(black_pixels[0])
 
             # Draw centroid
-            cv2.circle(image, (int(centroid_x), int(centroid_y)), 5, (0, 0, 255), -1)
+            cv2.circle(
+                image, 
+                (int(centroid_x), 
+                 int(centroid_y)), 
+                 5, 
+                 (0, 0, 255), 
+                 -1
+            )
 
-        circles = cv2.HoughCircles(filteredFrame, 
-                                   cv2.HOUGH_GRADIENT, 
-                                   1, 
-                                   20, 
-                                   param1=100, 
-                                   param2 = self.SENSITIVITY, 
-                                   minRadius = self.MIN_RADIUS, 
-                                   maxRadius = self.MAX_RADIUS)
+        circles = cv2.HoughCircles(
+            filteredFrame, 
+            cv2.HOUGH_GRADIENT, 
+            1, 
+            20, 
+            param1=100, 
+            param2 = self.sensitivity, 
+            minRadius = self.minRadius, 
+            maxRadius = self.maxRadius
+        )
         
         if circles is not None:
             circles = np.round(circles[0, :]).astype("int")
@@ -82,6 +113,7 @@ class DistanceNode():
 
             self.get_distance(2 * r)
             
+            # TODO: turn the code below into its own visualization method.
             # For visualization:
 
             visual = False
@@ -99,7 +131,9 @@ class DistanceNode():
         
                 # Display the original and filtered frames
                 # cv2.imshow('Original Webcam Feed', image)
-                cv2.imshow('Filtered Webcam Feed', filteredFrame)  # For Debugging
+
+                # For Debugging
+                cv2.imshow('Filtered Webcam Feed', filteredFrame)  
 
                 # Break the loop when 'q' key is pressed
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -107,6 +141,15 @@ class DistanceNode():
 
 
     def get_distance(self, pixelHeight):
+        """
+        Uses optics math and the estimated height of the object to calculate 
+        predicted distance between the object and the camera.
+
+        Parameters
+        ----------
+        pixelHeight : int
+            The height of the object in pixels.
+        """
         actualHeight = 0.111  # meters
         focalLength = 1845       # TODO: calculate a more accurate focal length  
         distance = (focalLength * actualHeight) / pixelHeight
@@ -124,13 +167,36 @@ class DistanceNode():
         
 
     def shutdown(self):
+        """
+        Shuts everything down. Add a ROS node shutdown call once ROS is 
+        integrated.
+        """
         self.cap.release()
         cv2.destroyAllWindows()
 
 
 if __name__=="__main__":
-    distanceDetector = DistanceNode()
+    parser = argparse.ArgumentParser(description="Description of your program")
+    parser.add_argument(
+        '--minRadius', 
+        type=int, 
+        help='Minimum circle radius to detect', 
+        default=5
+    )
+    parser.add_argument(
+        '--maxRadius', 
+        type=int, 
+        help='Maximum circle radius to detect', 
+        default=1000
+    )
+    parser.add_argument(
+        '--sensitivity', 
+        type=int, 
+        help='Sensitivity of the transform', 
+        default=20
+    )
+    args = parser.parse_args()
+    
+    distanceDetector = DistanceNode(args)
     while True:
         distanceDetector.get_bounding_box()
-
-    
