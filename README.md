@@ -1,6 +1,6 @@
 # trilaterationBasedOdometry
 
-## Overview
+## An Overview
 In the course of my various work experiences and personal project ideations, I 
 have found myself stumbling on the same issue - how do you **precisely** localize 
 an object with respect to some known origin?
